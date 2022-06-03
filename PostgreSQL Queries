@@ -1,0 +1,278 @@
+-- Database: hh
+
+-- DROP DATABASE hh;
+
+CREATE DATABASE hh
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Russian_Russia.1251'
+    LC_CTYPE = 'Russian_Russia.1251'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+	
+	CREATE TABLE Profiles (
+    profile_id int PRIMARY KEY,
+    firstname varchar(15) NOT NULL,
+    lastname varchar(15) NOT NULL,
+    email varchar(30) NOT NULL
+    );
+	
+	CREATE TABLE Professions (
+    profession_id int PRIMARY KEY,
+    prof_name varchar(30) NOT NULL
+    );
+ 
+    CREATE TABLE Jobs (
+    job_id int PRIMARY KEY,
+    job_name varchar(30) NOT NULL,
+    salary int,
+    min_experience int,
+    schedule varchar(100),
+	profession_id int REFERENCES Professions(profession_id)
+    );
+ 
+    CREATE TABLE Articles (
+    articl_id int PRIMARY KEY,
+    articl_name varchar(55) NOT NULL,
+    text varchar(500) NOT NULL,
+    date_text date,
+    profession_id int REFERENCES Professions(profession_id)
+    );
+ 
+    CREATE TABLE Summaries(
+    summary_id int PRIMARY KEY,
+    profession_emp varchar(30) NOT NULL,
+    education varchar(30),
+    language varchar(50),
+    dob date,
+    experience int,
+    region varchar(50),
+    profile_id int REFERENCES Profiles(profile_id),
+	profession_id int REFERENCES Professions(profession_id)
+    );
+ 
+    CREATE TABLE Answers(
+    answ_id int PRIMARY KEY,
+    Answer varchar(300) NOT NULL
+    );
+	
+	CREATE TABLE Questions(
+    quest_id int PRIMARY KEY,
+    question varchar(100) NOT NULL,
+	answ_id int REFERENCES Answers(answ_id),
+	profile_id int REFERENCES Profiles(profile_id) 
+    );
+ 
+    CREATE TABLE Companies(
+    comp_id int PRIMARY KEY,
+    comp_name varchar(50) NOT NULL,
+    email varchar(30) NOT NULL,
+    phone_number int
+    );
+ 
+    CREATE TABLE Profiles_jobs(
+    prjob_id int PRIMARY KEY,
+    job_id int REFERENCES Jobs(job_id),
+    profession_id int REFERENCES Professions(profession_id)
+    );
+ 
+    CREATE TABLE Jobs_Companies(
+    jac_id int PRIMARY KEY,
+    job_id int REFERENCES Jobs(job_id),
+    comp_id int REFERENCES Companies(comp_id)
+    );
+	
+    INSERT INTO Profiles
+    VALUES(1,'Bauka','Zhanysbai','bauka03@mail.ru');
+	INSERT INTO Profiles
+	VALUES(2,'Erzhan','Asymov','erzhan@gmail.com');
+	INSERT INTO Profiles
+	VALUES(3,'Sayat','Zaman','sayat00@hmail.com');
+	
+	INSERT INTO Professions
+	VALUES(1,'Programmer');
+	INSERT INTO Professions
+	VALUES(2,'Teacher');
+	INSERT INTO Professions
+	VALUES(3,'Engineer');
+	
+	INSERT INTO Jobs
+	VALUES(1, 'Software developer',300000,2,'9.00 - 18.00', 1);
+	INSERT INTO Jobs
+	VALUES(2, 'Math teacher',350000,3,'8.00 - 17.00', 2);
+	INSERT INTO Jobs
+	VALUES(3, 'Energy Engineer',200000,1,'10.00 - 20.00', 3);
+
+	
+	INSERT INTO Articles
+	VALUES(1, 'A future profession','Nowadays IT is the main part of our life.','31-10-2021',1);
+	INSERT INTO Articles
+	VALUES(2, 'Is the profession of a teacher important now?','Teachers are arguably the most important members of our society. 
+		   They give children purpose, set them up for success as citizens of our world, 
+		   and inspire in them a drive to do well and succeed in life. The children of today are the leaders of tomorrow, and teachers are that critical point that makes a child ready for their future. 
+		   Why are teachers important? Let’s count the ways…','31-10-2018',2);
+	INSERT INTO Articles
+	VALUES(3, 'Who is an engineer?','Engineers, as practitioners of engineering, are professionals who invent, design, analyze, build and test machines, complex systems, structures, gadgets and materials to fulfill 
+		   functional objectives and requirements while considering the limitations imposed by practicality, 
+		   regulation, safety and cost.','31-10-2021',3);
+	
+	INSERT INTO Summaries
+	VALUES(1, 'Back-end developer', 'high', 'kaz-rus-eng', '31.10.2002', 2, 'Almaty', 1, 1);
+	INSERT INTO Summaries
+	VALUES(2, 'English teacher', 'high', 'kaz-rus-eng', '02.10.1980', 10, 'Almaty', 2, 2);
+	INSERT INTO Summaries
+	VALUES(3, 'Engineer-constructor', 'high', 'kaz-rus', '25.08.1985', 7, 'Almaty', 3, 3);
+	
+	INSERT INTO Answers
+	VALUES(1,'Any visitor to the site can search for jobs and view search results. Registration is necessary in order to place your resume on the site and be able to respond to vacancies');
+	INSERT INTO Answers
+	VALUES(2,'To change your e-mail, you need to enter a new e-mail address in the "E-mail" field, enter your current password to the site in the "Current password" field and click the "Save" button.');
+	INSERT INTO Answers
+	VALUES(3,'Click the "Edit" button, which is highlighted under the resume when you hover the mouse.');
+	
+	INSERT INTO Questions
+	VALUES(1, 'Why do I need to register?',1,1);
+	INSERT INTO Questions
+	VALUES(2, 'How to change login or password?',2,2);
+	INSERT INTO Questions
+	VALUES(3, 'How do I make changes to my summary?',3,3);
+	
+	INSERT INTO Companies
+	VALUES(1, 'Daryn online', 'dar_15@mail.ru', 7756253);
+	INSERT INTO Companies
+	VALUES(2, 'Studylink', 'stud_77@mail.ru', 7757773);
+	INSERT INTO Companies
+	VALUES(3, 'Aspan city', 'asp156@mail.ru', 7776505);
+	
+	INSERT INTO Profiles_jobs
+	VALUES(1,1,1);
+	INSERT INTO Profiles_jobs
+	VALUES(2,2,2);
+	INSERT INTO Profiles_jobs
+	VALUES(3,3,3);
+	
+	INSERT INTO Jobs_Companies
+	VALUES(1,1,1);
+	INSERT INTO Jobs_Companies
+	VALUES(2,2,2);
+	INSERT INTO Jobs_Companies
+	VALUES(3,3,3);
+	
+	--1
+	SELECT * FROM Profiles;
+	
+	--2
+	SELECT * FROM Profiles
+	WHERE profile_id = 2;
+	
+	--3
+	SELECT p.firstname, s.profession_emp, s.dob, s.region
+	FROM Profiles p, Summaries s
+	WHERE p.profile_id = s.profile_id;
+	
+	--4
+	SELECT j.job_name, j.salary, p.prof_name
+	FROM Jobs j
+	INNER JOIN Professions p
+	ON j.profession_id = p.profession_id;
+	
+	--5
+	SELECT s.profession_emp, s.education, p.prof_name
+	FROM Summaries s
+	LEFT JOIN Professions p
+	ON s.profession_id = p.profession_id;
+	
+	--6
+	SELECT a.articl_name, p.prof_name
+	FROM Articles a
+	RIGHT JOIN Professions p
+	ON a.profession_id = p.profession_id;
+	
+	--7
+	SELECT q.question, a.answer
+	FROM Questions q
+	FULL OUTER JOIN Answers a
+	ON q.answ_id = a.answ_id;
+	
+	--8
+	SELECT profession_id, prof_name AS profession_name
+	FROM Professions;
+	
+	--9
+	SELECT firstname || ' ' || lastname AS full_name
+	FROM Profiles;
+	
+	--10
+	SELECT DISTINCT education
+	FROM Summaries;
+	
+	--11
+	SELECT * FROM Profiles
+	WHERE profile_id IS NULL;
+	
+	--12
+	SELECT job_id, job_name FROM Jobs
+	WHERE job_id IS NOT NULL;
+	
+	--13
+	SELECT job_id, job_name, salary
+	FROM Jobs
+	WHERE salary BETWEEN 300000 AND 350000;
+	
+	-14
+	SELECT profession_emp, experience
+	FROM Summaries
+	WHERE experience > 5;
+	
+	--15
+	SELECT comp_name
+	FROM Companies
+	WHERE comp_name LIKE 'Da%';
+	
+	-16
+	SELECT prof_name
+	FROM Professions
+	WHERE prof_name LIKE 'Teache_';
+	
+	--17
+	SELECT CAST (phone_number AS varchar(20))
+	FROM Companies;
+	
+	--18
+	SELECT max(salary), min(salary), avg(salary)
+	FROM Jobs;
+	
+	--19
+	SELECT count(*) AS "NumOfProfiles"
+	FROM Profiles;
+	
+	--20
+	SELECT job_name, count(*)
+	FROM Jobs
+	GROUP BY job_name;
+	
+	--21
+	SELECT p.prof_name, count(*) AS number_of_articles
+	FROM Professions p, Articles a
+	WHERE p.profession_id = a.profession_id
+	GROUP BY prof_name
+	HAVING count(*) = 1;
+	
+	-22
+	SELECT job_id, job_name, salary
+	FROM Jobs
+	ORDER BY salary ASC;
+	
+	
+	
+	SELECT * FROM Profiles
+	SELECT * FROM Professions
+    SELECT * FROM Jobs
+	SELECT * FROM Articles
+    SELECT * FROM Summaries
+    SELECT * FROM Questions
+    SELECT * FROM Answers
+    SELECT * FROM Companies
+	SELECT * FROM Profiles_jobs
+    SELECT * FROM Jobs_Companies
