@@ -1,0 +1,59 @@
+Project: Job search.
+Part 1. Subject Area Analysis (individual topic, teamwork)
+Goal: to perform a first step of database design - Subject Area Analysis.
+Task: to make a description of a future database according to the following plan.
+Topic of the database is according to the individual task. Note: the database should
+contain minimum 10 entities (tables).
+Plan:
+1. Describe in detail what information will be stored in a future database.
+In our program, we will solve the biggest problem in Kazakhstan now. It is about unemployment. In this program, the job search process will be carried out.
+2. List all entities and attributes (tables and columns) in the required format.
+Every entity should have a Primary key, underline it in the description. Note: the
+database should contain minimum 10 entities.
+1.	Register_data (user_id, name, lastname, login, password, phone, email)
+2.	Profiles(profile_id, first_name, lastname, avatar, email)
+3.	Jobs (job_id, job_name, category, salary, min_experience, description, job_language, schedule)
+4.	Chosen(chosen_id, job_name, vacancies, subscriptions)
+5.	Articles (articl_id, arcticl_name, text, date)
+6.	Professions (profession_id, prof_name,  job_name)
+7.	Summaries(summary_id, profession,  education, languages, nation, dob, experience, skills, region)
+8.	Questions(quest_id, question)
+9.	Answers(answ_id,  answer)
+10.	Contacts(cont_id, email, phone_number, whatsapp, facebook, instagram)
+3. List and describe all relationships between entities.
+Relationship 1: Jobs and Chosen
+One job can be in one chosen, and one chosen can contain many jobs
+Relationship 2:  Profiles and Jobs
+One profile can search many jobs, and one job can have many profiles
+Relationship 3: Summaries and Professions
+One summary can be in one profession, and one profession can contain many summaries
+Relationship 4: Profiles and Summaries
+One profile can have many summaries, and one summary can be in one profiles
+Relationship 5: Questions and Answers
+One question can have one answer, and one answer can be only for one question.
+Relationship 6: Jobs and Contacts
+One job can have many contacts, and one contact only for one job
+
+4. List all constraints (3-5 will be enough).
+Note: constraints should only apply to the information that is stored in the database,
+otherwise they cannot be implemented.
+1.	To register for the program, the age must be 18 or over 18;
+2.	Every people can submit an application to own profession;
+3.	Only one account for each user;
+4.	Every user can create many summaries that related to their profession;
+5. Specify all groups of users and their access rights (2 will be enough).
+User_group_1.Profile.Access rights: FAQ (read_write)
+User_group_2.Profile.Access rights: Chosen (view_change)
+User_group_3.Profile.Access rights: Article (read_only)
+User_group_4.Profile.Access rights: Summary(view_change)
+6. List all potential queries from users (10-15 will be enough).
+1.	Show all profiles 
+2.	Show all jobs by profession
+3.	Show summaries by profession
+4.	Show  FAQ(Frequently asked questions)
+5.	Show all articles
+6.	Show all professions
+7.	Show articles by date
+8.	Show jobs dependent language
+9.	Show jobs from their salary
+10.	Show summaries by education and region
